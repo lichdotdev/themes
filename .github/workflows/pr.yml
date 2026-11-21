@@ -1,0 +1,59 @@
+name: pr
+
+# pull_request_target, not pull_request: a listing request comes from a fork,
+# and only this event's token can comment on it. It runs this repository's
+# own code from the base branch; the pull request's themes.json is read as
+# data and nothing from its head is run.
+on:
+  pull_request_target:
+    paths: [themes.json]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - name: Check the added repositories
+        id: check
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          git fetch --quiet origin "pull/$PR/head"
+          git show FETCH_HEAD:themes.json > "$RUNNER_TEMP/head.json"
+          added=$(jq -r --slurpfile base themes.json \
+            '.[] | select(. as $r | $base[0] | index($r) | not)' "$RUNNER_TEMP/head.json")
+          status=0
+          : > "$RUNNER_TEMP/report.txt"
+          go build -o "$RUNNER_TEMP/catalog" ./cmd/catalog
+          for repo in $added; do
+            "$RUNNER_TEMP/catalog" check "$repo" >> "$RUNNER_TEMP/report.txt" 2>&1 || status=1
+          done
+          [ -n "$added" ] || echo "No repository added." > "$RUNNER_TEMP/report.txt"
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+      - name: Comment
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+          STATUS: ${{ steps.check.outputs.status }}
+        run: |
+          marker='<!-- catalog-check -->'
+          verdict='Every added repository passes.'
+          [ "$STATUS" = 0 ] || verdict='Some checks fail: fix them and bump the pack version, then push to this pull request to check again.'
+          body=$(printf '%s\n### Catalog check\n\n%s\n\n```\n%s\n```\n' "$marker" "$verdict" "$(cat "$RUNNER_TEMP/report.txt")")
+          id=$(gh api --paginate "repos/$GITHUB_REPOSITORY/issues/$PR/comments" \
+            --jq ".[] | select(.user.login == \"github-actions[bot]\" and (.body | startswith(\"$marker\"))) | .id" | head -n 1)
+          if [ -n "$id" ]; then
+            gh api -X PATCH "repos/$GITHUB_REPOSITORY/issues/comments/$id" -f body="$body" > /dev/null
+          else
+            gh pr comment "$PR" --repo "$GITHUB_REPOSITORY" --body "$body"
+          fi
+      - if: steps.check.outputs.status != '0'
+        run: exit 1

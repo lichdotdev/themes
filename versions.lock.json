@@ -1,0 +1,29 @@
+{
+  "lichdotdev/bluloco-lich": {
+    "1.4.0": "7517d39e12234a0c84504c3b6d4cfd73d524315f"
+  },
+  "lichdotdev/catppuccin-lich": {
+    "1.4.0": "1df606e145695c862c5959ca7f04e72c6c5d6a7a"
+  },
+  "lichdotdev/cloud9-jetstream-lich": {
+    "1.4.0": "1806d24ee7b43a345b8444851b2f912b5d540f4d"
+  },
+  "lichdotdev/eldritch-lich": {
+    "1.5.0": "ac8c82cc1076c9254c42ad5e791f70c567fc0905"
+  },
+  "lichdotdev/everforest-lich": {
+    "1.4.1": "6e8ee40a7813e8e70c1dd7e6f94886075ce13e18"
+  },
+  "lichdotdev/lotus-lich": {
+    "1.5.0": "7f3627f8781d0f085a93ef022da7ed118c1b4064"
+  },
+  "lichdotdev/moonfly-lich": {
+    "1.2.0": "632029190bbd3c7e2497e375174e43d72d0a927c"
+  },
+  "lichdotdev/oceanic-next-lich": {
+    "1.4.0": "d1c757ee01939e611f108a863ed118d9feeb786d"
+  },
+  "lichdotdev/rose-pine-lich": {
+    "1.5.0": "514d476128d22dda313d1699eafcb31db94d0bee"
+  }
+}

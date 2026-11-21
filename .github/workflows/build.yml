@@ -1,0 +1,38 @@
+name: build
+
+on:
+  schedule:
+    - cron: "23 * * * *"
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - run: go vet ./... && go test ./...
+      - name: Build
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: go run ./cmd/catalog build
+      # A push made with this token starts no workflow, so this commit does not
+      # build again.
+      - name: Commit
+        run: |
+          git add catalog.json versions.lock.json
+          git diff --cached --quiet && exit 0
+          git -c user.name='github-actions[bot]' \
+            -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
+            commit --quiet -m "Build the catalog"
+          git push
