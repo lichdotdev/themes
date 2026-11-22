@@ -1,6 +1,6 @@
 {
   "formatVersion": 1,
-  "generated": "2026-11-22T17:54:09Z",
+  "generated": "2026-11-22T23:40:03Z",
   "packs": [
     {
       "id": "bluloco",
@@ -1747,10 +1747,10 @@
       "repo": "https://github.com/lichdotdev/lotus-lich",
       "repoId": 1333445626,
       "license": "MIT",
-      "version": "1.5.0",
-      "commit": "7f3627f8781d0f085a93ef022da7ed118c1b4064",
+      "version": "1.5.1",
+      "commit": "248b896334251a90749aafaf98df1182f2aea873",
       "minLichVersion": "0.53.0",
-      "updated": "2026-10-16T00:42:56Z",
+      "updated": "2026-11-20T20:10:31Z",
       "themes": [
         {
           "id": "lotus-dark",
@@ -1774,7 +1774,7 @@
             "input": "#565656",
             "muted": "#262626",
             "muted-foreground": "#757575",
-            "popover": "#111111",
+            "popover": "#1a1a1a",
             "popover-foreground": "#b0b0b0",
             "primary": "#ffb3d6",
             "primary-foreground": "#141414",
