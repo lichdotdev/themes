@@ -1,6 +1,6 @@
 {
   "formatVersion": 1,
-  "generated": "2026-11-27T15:15:34Z",
+  "generated": "2026-11-27T23:31:49Z",
   "packs": [
     {
       "id": "bluloco",
@@ -1494,6 +1494,7 @@
       "commit": "6e8ee40a7813e8e70c1dd7e6f94886075ce13e18",
       "minLichVersion": "0.53.0",
       "updated": "2026-10-17T15:50:38Z",
+      "held": "https://raw.githubusercontent.com/lichdotdev/everforest-lich/6e8ee40a7813e8e70c1dd7e6f94886075ce13e18/everforest-light.json: status 503",
       "themes": [
         {
           "id": "everforest-dark",
